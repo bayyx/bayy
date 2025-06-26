@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // SHA256 hash untuk password 'root'
-$hashed_password = '7975f8e8c02c5030d8c24ab0b416408e';
+$hashed_password = '8435d000266db81a0bc4da1b2ffb1f91097b87f8347f00b1d8f66aac93a36311';
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
